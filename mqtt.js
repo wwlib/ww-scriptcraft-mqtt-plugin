@@ -36,6 +36,13 @@ client.onMessageArrived(function(topic, message){
    }
 });
 
+function publishMessage(mqtt_topic, message_obj_str) {
+    client.publish(mqtt_topic,  // topic
+                   message_obj_str, // payload
+                   1,           // QoS (1 is send at least once)
+                   false );     // do not retain the message
+}
+
 function onBuildACottage(player) {
     var d = new Drone(player);
     d.cottage();
@@ -67,17 +74,14 @@ var message_obj = {
   event: 'scriptcraftMqttReady'
 }
 var message_obj_str = JSON.stringify(message_obj);
-client.publish(mqtt_topic,  // topic
-               message_obj_str, // payload
-               1,            // QoS (1 is send at least once)
-               true );       // broker should retain message
+publishMessage(mqtt_topic, message_obj_str);
 
 // events.on('block.BlockBreakEvent', function (listener, event){
 //   console.log('mqtt.js: sending minecraft/blockbreak');
-//   client.publish(mqtt_topic,  // topic
+//   publishMessage(mqtt_topic,  // topic
 //                  'blockbreak', // payload
 //                  1,            // QoS (1 is send at least once)
-//                  true );       // broker should retain message
+//                  false );       // broker should retain message
 // });
 
 // events.blockDestroy( function( evt, cancel ) {
@@ -103,10 +107,7 @@ events.playerMove( function(event) {
               }
             }
             var message_obj_str = JSON.stringify(message_obj);
-            client.publish(mqtt_topic,  // topic
-                           message_obj_str, // payload
-                           1,            // QoS (1 is send at least once)
-                           true );
+            publishMessage(mqtt_topic, message_obj_str);
         }
     }
 });
@@ -125,10 +126,7 @@ events.blockBreak( function( event ) {
     }
   }
   var message_obj_str = JSON.stringify(message_obj);
-  client.publish(mqtt_topic,  // topic
-                 message_obj_str, // payload
-                 1,            // QoS (1 is send at least once)
-                 true );
+  publishMessage(mqtt_topic, message_obj_str);
 });
 
 events.blockPlace( function( event ) {
@@ -145,10 +143,7 @@ events.blockPlace( function( event ) {
     }
   }
   var message_obj_str = JSON.stringify(message_obj);
-  client.publish(mqtt_topic,  // topic
-                 message_obj_str, // payload
-                 1,            // QoS (1 is send at least once)
-                 true );
+  publishMessage(mqtt_topic, message_obj_str);
 });
 
 events.playerJoin( function( event ) {
@@ -160,10 +155,7 @@ events.playerJoin( function( event ) {
     data: {}
   }
   var message_obj_str = JSON.stringify(message_obj);
-  client.publish(mqtt_topic,  // topic
-                 message_obj_str, // payload
-                 1,            // QoS (1 is send at least once)
-                 true );
+  publishMessage(mqtt_topic, message_obj_str);
 });
 
 events.playerQuit( function( event ) {
@@ -175,10 +167,7 @@ events.playerQuit( function( event ) {
     data: {}
   }
   var message_obj_str = JSON.stringify(message_obj);
-  client.publish(mqtt_topic,  // topic
-                 message_obj_str, // payload
-                 1,            // QoS (1 is send at least once)
-                 true );
+  publishMessage(mqtt_topic, message_obj_str);
 });
 
 // events.playerDeath( function( event ) {
@@ -188,10 +177,10 @@ events.playerQuit( function( event ) {
 //     entity: event.entity
 //   }
 //   var message_obj_str = JSON.stringify(message_obj);
-//   client.publish(mqtt_topic,  // topic
+//   publishMessage(mqtt_topic,  // topic
 //                  message_obj_str, // payload
 //                  1,            // QoS (1 is send at least once)
-//                  true );
+//                  false );
 // });
 
 function onPlayerInteractEntity(event) {
@@ -202,10 +191,7 @@ function onPlayerInteractEntity(event) {
       data: {}
     }
     var message_obj_str = JSON.stringify(message_obj);
-    client.publish(mqtt_topic,  // topic
-                   message_obj_str, // payload
-                   1,            // QoS (1 is send at least once)
-                   true );
+    publishMessage(mqtt_topic, message_obj_str);
 }
 events.playerInteractEntity(onPlayerInteractEntity);
 
@@ -216,10 +202,7 @@ function onPlayerEggThrow(event) {
       data: {}
     }
     var message_obj_str = JSON.stringify(message_obj);
-    client.publish(mqtt_topic,  // topic
-                   message_obj_str, // payload
-                   1,            // QoS (1 is send at least once)
-                   true );
+    publishMessage(mqtt_topic, message_obj_str);
 }
 events.playerEggThrow(onPlayerEggThrow);
 
@@ -231,10 +214,7 @@ function onPlayerBedEnter(event) {
       data: {}
     }
     var message_obj_str = JSON.stringify(message_obj);
-    client.publish(mqtt_topic,  // topic
-                   message_obj_str, // payload
-                   1,            // QoS (1 is send at least once)
-                   true );
+    publishMessage(mqtt_topic, message_obj_str);
 }
 events.playerBedEnter(onPlayerBedEnter);
 
@@ -245,10 +225,7 @@ function onPlayerBedLeave(event) {
       data: {}
     }
     var message_obj_str = JSON.stringify(message_obj);
-    client.publish(mqtt_topic,  // topic
-                   message_obj_str, // payload
-                   1,            // QoS (1 is send at least once)
-                   true );
+    publishMessage(mqtt_topic, message_obj_str);
 }
 events.playerBedLeave(onPlayerBedLeave);
 
@@ -260,10 +237,7 @@ function onPlayerFish(event) {
       data: {}
     }
     var message_obj_str = JSON.stringify(message_obj);
-    client.publish(mqtt_topic,  // topic
-                   message_obj_str, // payload
-                   1,            // QoS (1 is send at least once)
-                   true );
+    publishMessage(mqtt_topic, message_obj_str);
 }
 events.playerFish(onPlayerFish);
 
@@ -274,9 +248,6 @@ function onCraftItem(event) {
       data: {}
     }
     var message_obj_str = JSON.stringify(message_obj);
-    client.publish(mqtt_topic,  // topic
-                   message_obj_str, // payload
-                   1,            // QoS (1 is send at least once)
-                   true );
+    publishMessage(mqtt_topic, message_obj_str);
 }
 events.craftItem(onCraftItem);
